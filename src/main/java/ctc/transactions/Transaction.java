@@ -1,3 +1,4 @@
+package ctc.transactions;
 
 import ctc.enums.Currency;
 import ctc.enums.TradeType;

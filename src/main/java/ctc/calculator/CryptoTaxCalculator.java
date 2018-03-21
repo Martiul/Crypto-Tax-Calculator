@@ -1,3 +1,7 @@
+package ctc.calculator;
+
+import ctc.transactions.Transaction;
+
 import java.util.ArrayList;
 
 public class CryptoTaxCalculator {

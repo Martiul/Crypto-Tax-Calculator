@@ -1,3 +1,7 @@
+package ctc.calculator;
+
+import ctc.transactions.Transaction;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,7 +11,7 @@ import java.util.Arrays;
  * A Transaction with an additional gain/loss field
  */
 
-public class CalculatedTransaction extends Transaction{
+public class CalculatedTransaction extends Transaction {
     private BigDecimal gainLoss;
 
     public CalculatedTransaction(Transaction t) {
@@ -25,6 +29,10 @@ public class CalculatedTransaction extends Transaction{
 
     public void setGainLoss(BigDecimal gainLoss) {
         this.gainLoss = gainLoss;
+    }
+
+    public BigDecimal getGainLoss() {
+        return gainLoss;
     }
 
     public String [] getHeader() {

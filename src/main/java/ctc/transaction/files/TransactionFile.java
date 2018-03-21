@@ -1,5 +1,7 @@
+package ctc.transaction.files;
+
 import com.opencsv.CSVWriter;
-import ctc.enums.Currency;
+import ctc.transactions.Transaction;
 
 import java.io.*;
 import java.util.*;
@@ -29,8 +31,16 @@ public abstract class TransactionFile {
      * getTransactions  - Returns a copy of the list of Transactions
      * @return Iterable<Transaction>
      */
-    protected Iterable<Transaction> getTransactions() {
+    public Iterable<Transaction> getTransactions() {
         return new ArrayList<Transaction>(transactions);
+    }
+
+    /**
+     * getNumberOfCells  - Returns the number of cells used by the file
+     * @return int
+     */
+    public int getNumberOfCells() {
+        return transactions.get(0).getHeader().length;
     }
 
     /**
@@ -65,6 +75,14 @@ public abstract class TransactionFile {
      * @param fileName - the name of the file to write to
      */
     public void writeToCsv(String fileName) {
+        writeToCsv(fileName, null);
+    }
+
+    /**
+     * writeToCsv   - Outputs all Transaction into a specified fileName
+     * @param fileName - the name of the file to write to
+     */
+    public void writeToCsv(String fileName, String [][] additionalLines) {
         try {
             Writer writer = new FileWriter(fileName);
 
@@ -79,11 +97,19 @@ public abstract class TransactionFile {
             for (Transaction t : transactions) {
                 csvWriter.writeNext(t.toCsv());
             }
+
+            if (additionalLines != null) {
+                for (String [] line : additionalLines) {
+                    csvWriter.writeNext(line);
+                }
+            }
+
             csvWriter.flush();
             csvWriter.close();
         } catch (IOException e) {
             System.err.println("Unable to open " + fileName);
         }
     }
+
 
 }

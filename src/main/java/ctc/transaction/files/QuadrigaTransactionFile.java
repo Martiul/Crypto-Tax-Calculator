@@ -1,14 +1,12 @@
+package ctc.transaction.files;
+
 import com.opencsv.CSVReader;
-import ctc.enums.TradeType;
+import ctc.transactions.Transaction;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Currency;
 import java.util.HashMap;
-import java.util.Map;
 
 public class QuadrigaTransactionFile extends TransactionFile {
 

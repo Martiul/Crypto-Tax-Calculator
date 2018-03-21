@@ -1,6 +1,9 @@
 import java.io.*;
 
 import com.opencsv.CSVReader;
+import ctc.calculator.CryptoTaxCalculator;
+import ctc.transaction.files.*;
+import ctc.transactions.Transaction;
 
 import java.util.ArrayList;
 

@@ -1,5 +1,7 @@
+package ctc.transaction.files;
 
 import com.opencsv.CSVReader;
+import ctc.transactions.Transaction;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

@@ -1,5 +1,10 @@
+package ctc.calculator;
+
+import ctc.calculator.Asset;
 import ctc.enums.Currency;
 import ctc.enums.TradeType;
+import ctc.transaction.files.TransactionFile;
+import ctc.transactions.Transaction;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -136,4 +141,15 @@ public class CalculatedTransactionFile extends TransactionFile {
         }
     }
 
+    @Override
+    public void writeToCsv(String fileName) {
+        int cells = getNumberOfCells();
+
+        String [][] additional = new String[2][cells];
+        BigDecimal totalGainLoss = BigDecimal.ZERO;
+        BigDecimal totalFees = BigDecimal.ZERO;
+
+        additional[1][cells-1] = "Hello world!";
+        super.writeToCsv(fileName, additional);
+    }
 }

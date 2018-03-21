@@ -1,3 +1,4 @@
+package ctc.calculator;
 
 import ctc.enums.Currency;
 
