@@ -2,6 +2,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * CalculatedTransaction:
+ * A Transaction with an additional gain/loss field
+ */
+
 public class CalculatedTransaction extends Transaction{
     private BigDecimal gainLoss;
 
@@ -33,7 +38,6 @@ public class CalculatedTransaction extends Transaction{
         re.add(String.format("%.2f", gainLoss));
         return re.toArray(new String[re.size()]);
     }
-
 
     public String toString() {
         String re = super.toString();
