@@ -2,6 +2,8 @@ import java.io.*;
 
 import com.opencsv.CSVReader;
 import ctc.calculator.CryptoTaxCalculator;
+import ctc.calculator.ExchangeDetector;
+import ctc.enums.Exchange;
 import ctc.transaction.files.*;
 import ctc.transactions.Transaction;
 
@@ -25,13 +27,13 @@ public class Main {
     public static void main(String [] args) throws FileNotFoundException, UnsupportedEncodingException {
 
 //        String [] args = test();
-        String flag;
-        String fileName = "";
+        String arg = "";
         String outputFileName = "CryptoTaxCalculatorOutput.csv";
         int argNum = 0;
         int numFiles = 0;
         TransactionFile transactionFile;
         ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+        ArrayList<Exchange> matchedExchange = new ArrayList<Exchange>();
 
         if (args.length == 0) {
             throw new IllegalArgumentException(USAGE_ERROR);
@@ -40,35 +42,31 @@ public class Main {
         // Process each file according to their associated flag
         // and store their Transactions
         while (argNum < args.length) {
-            flag = args[argNum];
+            arg = args[argNum];
 
-            if (flag.charAt(0) == '-') {
-                try {
-                    fileName = args[++argNum];
+            try {
 
-                    if (flag.equals("-output")) {
-                        outputFileName = fileName;
-                    } else {
-                        // Process and store Transactions
-                        transactionFile = processFile(flag, fileName);
-                        for (Transaction t: transactionFile.getTransactions()) {
-                            transactions.add(t);
-                        }
-                        numFiles++;
+                if (arg.equals("-output")) {
+                    outputFileName = args[argNum++];
+                } else {
+                    // Process and store Transactions
+                    transactionFile = processFile(arg);
+                    for (Transaction t: transactionFile.getTransactions()) {
+                        transactions.add(t);
                     }
-
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    System.err.println(USAGE_ERROR);;
-                    throw e;
-                } catch (FileNotFoundException e) {
-                    System.err.println("Unable to process the file " + fileName);;
-                    throw e;
-                } catch (UnsupportedEncodingException e) {
-                    System.err.println("Unsupported Encoding when processing the file: " + fileName);
-                    throw e;
+                    transactionFile.getEx
+                    numFiles++;
                 }
-            } else {
-                throw new IllegalArgumentException(USAGE_ERROR);
+
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.err.println(USAGE_ERROR);;
+                throw e;
+            } catch (FileNotFoundException e) {
+                System.err.println("Unable to process the file " + fileName);;
+                throw e;
+            } catch (UnsupportedEncodingException e) {
+                System.err.println("Unsupported Encoding when processing the file: " + fileName);
+                throw e;
             }
             argNum++;
         }
