@@ -2,14 +2,19 @@ package ctc.calculator;
 
 import ctc.enums.Exchange;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * ExchangeDetector:
+ * Given the first line of a csv file as a String [],
+ * determines the exchange associated with the file
+ */
+
 public class ExchangeDetector {
 
-    public HashMap<Exchange, String []> signatures;
+    private HashMap<Exchange, String []> signatures;
 
     public ExchangeDetector(){
         signatures = new HashMap<Exchange, String[]>();
@@ -30,19 +35,27 @@ public class ExchangeDetector {
         });
     }
 
+    /**
+     * determineExchange    - Takes in the first line of a csv file (it's 'signature')
+     *                        and returns the associated exchange or throws an exception
+     *
+     * @param signature                 - the first line of the csv
+     * @throws IllegalArgumentException - if the signature does not match any of the supported exchanges
+     * @return Exchange                 - The associated exchange
+     */
     public Exchange determineExchange(String [] signature) {
+
         for (Map.Entry<Exchange, String []> entry : signatures.entrySet()) {
             if (Arrays.equals(signature, entry.getValue())) {
                 return entry.getKey();
             }
         }
-        return null;
+        throw new IllegalArgumentException("CSV signature does not match any supported exchanges");
     }
 
     public static void main (String[] args) {
         String [] s = new String[] {"Date","Market","Type","Price","Amount","Total","Fee","Fee Coin"};
 
         ExchangeDetector ed = new ExchangeDetector();
-        System.out.println(ed.determineExchange(s));
     }
 }

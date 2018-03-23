@@ -8,6 +8,9 @@ import ctc.transaction.files.*;
 import ctc.transactions.Transaction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Main:
@@ -24,87 +27,129 @@ public class Main {
             "[-kraken kraken.csv] " +
             "[-quadriga quadriga.csv]";
 
-    public static void main(String [] args) throws FileNotFoundException, UnsupportedEncodingException {
+    public static void main(String [] argss) throws NullPointerException {
 
-//        String [] args = test();
-        String arg = "";
-        String outputFileName = "CryptoTaxCalculatorOutput.csv";
+        String [] args = inputByFile("test3.txt");
+        String arg;
         int argNum = 0;
         int numFiles = 0;
+        boolean validFiles = false;
+        String outputFileName = "CryptoTaxCalculatorOutput.csv";
+
         TransactionFile transactionFile;
         ArrayList<Transaction> transactions = new ArrayList<Transaction>();
-        ArrayList<Exchange> matchedExchange = new ArrayList<Exchange>();
+        HashMap<String, Exchange> matchedExchanges = new HashMap<String, Exchange>();
 
         if (args.length == 0) {
             throw new IllegalArgumentException(USAGE_ERROR);
         }
 
-        // Process each file according to their associated flag
-        // and store their Transactions
+        // Go through arguments and detect the Exchange each csv came from
+        Exchange exchangeOfFile;
+        ExchangeDetector detector = new ExchangeDetector();
+        CSVReader csvReader = null;
         while (argNum < args.length) {
             arg = args[argNum];
+            validFiles = false;
 
             try {
-
                 if (arg.equals("-output")) {
-                    outputFileName = args[argNum++];
+                    outputFileName = args[++argNum];
+                    validFiles = true;
                 } else {
-                    // Process and store Transactions
-                    transactionFile = processFile(arg);
-                    for (Transaction t: transactionFile.getTransactions()) {
-                        transactions.add(t);
-                    }
-                    transactionFile.getEx
-                    numFiles++;
-                }
+                    csvReader = new CSVReader(new InputStreamReader(new FileInputStream(arg), "UTF-8"));
+                    String[] signature = csvReader.readNext();
 
+                    exchangeOfFile = detector.determineExchange(signature);
+                    matchedExchanges.put(arg, exchangeOfFile);
+
+                    numFiles++;
+                    validFiles = true;
+                }
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.err.println(USAGE_ERROR);;
-                throw e;
             } catch (FileNotFoundException e) {
-                System.err.println("Unable to process the file " + fileName);;
-                throw e;
+                System.err.println("Unable to find the file " + arg);;
             } catch (UnsupportedEncodingException e) {
-                System.err.println("Unsupported Encoding when processing the file: " + fileName);
-                throw e;
+                System.err.println("Unsupported Encoding when processing the file: " + arg);
+            } catch (IOException e) {
+                System.err.println("IO Error");
+            } catch (IllegalArgumentException e) {
+                System.err.println(e.getMessage());
+            } finally {
+                if (csvReader != null) {
+                    try {
+                        csvReader.close();
+                    } catch (IOException e) {
+                        System.err.println(e.getMessage());
+                    }
+                }
+            }
+
+            if (!validFiles) {
+                break;
             }
             argNum++;
         }
 
-        System.out.println("Number of files processed: " + numFiles);
-        System.out.println("Number of transactions: " + transactions.size() + "\n");
+        if (validFiles && numFiles > 0) {
+            for (Map.Entry<String, Exchange> file : matchedExchanges.entrySet()) {
+                System.out.println(file.getKey() + " - " + file.getValue());
+            }
 
-        CryptoTaxCalculator ctc = new CryptoTaxCalculator(transactions);
-        ctc.writeToCsv(outputFileName);
-        ctc.outputAssets();
+            System.out.print("Is this the correct information (Y/N)? ");
+            Scanner sc = new Scanner(System.in);
+            char input = sc.next().charAt(0);
+            if (input == 'y' || input == 'Y') {
+                try {
+                    for (Map.Entry<String, Exchange> matching : matchedExchanges.entrySet()) {
+                        transactionFile = processFile(matching.getKey(), matching.getValue());
+                        for (Transaction t : transactionFile.getTransactions()) {
+                            transactions.add(t);
+                        }
+                    }
+                    System.out.println("Number of files processed: " + numFiles);
+                    System.out.println("Number of transactions: " + transactions.size() + "\n");
+
+                    CryptoTaxCalculator ctc = new CryptoTaxCalculator(transactions);
+                    ctc.writeToCsv(outputFileName);
+                    ctc.outputAssets();
+                } catch (IOException e) {
+
+                }
+            }
+        } else if (numFiles == 0) {
+            System.out.println("No files were provided");
+        }
+
     }
 
     /**
      * processFile  - Takes in the type of file and the file path to create
      *                the corresponding TransactionFile class
      *
-     * @param flag      - The type of file
-     * @param filePath  - The path to the file
+     * @param filePath      - The path to the file
+     * @param exchange      - The exchange the file came from
      * @throws FileNotFoundException    - if file was not found
      * @throws IllegalArgumentException - unrecognized flag passed
      * @throws UnsupportedEncodingException - error opening file
      * @return TransactionFile
      */
-    private static TransactionFile processFile(String flag, String filePath)
+    private static TransactionFile processFile(String filePath, Exchange exchange)
             throws FileNotFoundException, IllegalArgumentException, UnsupportedEncodingException {
 
         try {
             CSVReader csvReader = new CSVReader( new InputStreamReader(new FileInputStream(filePath), "UTF-8"));
-            if (flag.equals("-quadriga")) {
-                return new QuadrigaTransactionFile(csvReader);
-            } else if (flag.equals("-coinbase")) {
-                return new CoinbaseTransactionFile(csvReader);
-            } else if (flag.equals("-kraken")) {
-                return new KrakenTransactionFile(csvReader);
-            } else if (flag.equals("-bitfinex")) {
-                return new BitfinexTransactionFile(csvReader);
-            } else if (flag.equals("-binance")) {
+            if (exchange == Exchange.BINANCE) {
                 return new BinanceTransactionFile(csvReader);
+            } else if (exchange == Exchange.BITFINEX) {
+                return new BitfinexTransactionFile(csvReader);
+            } else if (exchange == Exchange.COINBASE) {
+                return new CoinbaseTransactionFile(csvReader);
+            } else if (exchange == Exchange.KRAKEN) {
+                return new KrakenTransactionFile(csvReader);
+            } else if (exchange == Exchange.QUADRIGA) {
+                return new QuadrigaTransactionFile(csvReader);
             }
         } catch (FileNotFoundException e) {
             System.err.println("Could not find file: " + filePath);
@@ -116,14 +161,14 @@ public class Main {
         throw new IllegalArgumentException("Flag not found");
     }
 
-    private static String [] test() {
-        String [] re = new String[20];
+
+    private static String [] inputByFile(String fileName) {
+        ArrayList<String> al = new ArrayList<String>();
         try {
             String line;
-            int idx = 0;
-            BufferedReader br = new BufferedReader(new FileReader("./ignore/test.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("./ignore/" + fileName));
             while((line = br.readLine()) != null) {
-                re[idx++] = line;
+                al.add(line);
             }
             br.close();
         } catch (FileNotFoundException e) {
@@ -131,7 +176,8 @@ public class Main {
         } catch (IOException e) {
 
         }
-        return re;
+
+        return al.toArray(new String [0]);
     }
 
 }

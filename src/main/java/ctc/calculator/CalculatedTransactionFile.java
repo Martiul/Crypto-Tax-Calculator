@@ -143,13 +143,24 @@ public class CalculatedTransactionFile extends TransactionFile {
 
     @Override
     public void writeToCsv(String fileName) {
-        int cells = getNumberOfCells();
+        int cells = numberOfCells();
 
-        String [][] additional = new String[2][cells];
+        String [][] additional = new String[3][cells];
         BigDecimal totalGainLoss = BigDecimal.ZERO;
         BigDecimal totalFees = BigDecimal.ZERO;
 
-        additional[1][cells-1] = "Hello world!";
+        for (Transaction t: getTransactions()) {
+            if (t instanceof CalculatedTransaction) {
+                totalGainLoss = totalGainLoss.add( ((CalculatedTransaction) t).getGainLoss());
+                totalFees = totalFees.add(t.getFee());
+            }
+        }
+
+        additional[1][cells-2] = totalFees.toString();
+        additional[1][cells-1] = totalGainLoss.toString();
+        additional[2][cells-2] = "Capital Gains: ";
+        additional[2][cells-1] = totalGainLoss.subtract(totalFees).toString();
+
         super.writeToCsv(fileName, additional);
     }
 }
