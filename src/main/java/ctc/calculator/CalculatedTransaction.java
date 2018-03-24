@@ -12,7 +12,9 @@ import java.util.Arrays;
  */
 
 public class CalculatedTransaction extends Transaction {
+
     private BigDecimal gainLoss;
+
 
     public CalculatedTransaction(Transaction t) {
         super(t);

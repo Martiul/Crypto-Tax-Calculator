@@ -29,13 +29,14 @@ public class Transaction implements Serializable, Comparable<Transaction> {
     private TradeType type;
     private Currency major;
     private Currency minor;
-    private BigDecimal amount;
+    private BigDecimal amount;          // Amount of major
     private BigDecimal localRate;       // Major-Minor rate
     private BigDecimal majorRate;       // Major-NATIVE rate
     private BigDecimal minorRate;       // Minor-NATIVE rate
     private BigDecimal value;
-    private BigDecimal feeAmount;
     private Currency feeCurrency;
+    private BigDecimal feeAmount;
+    private BigDecimal feeRate;
     private BigDecimal fee;
     private final Currency NATIVE = Currency.CAD;
     private DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
@@ -53,8 +54,9 @@ public class Transaction implements Serializable, Comparable<Transaction> {
         this.majorRate = other.majorRate;
         this.minorRate = other.minorRate;
         this.value = other.value;
-        this.feeAmount = other.feeAmount;
         this.feeCurrency = other.feeCurrency;
+        this.feeAmount = other.feeAmount;
+        this.feeRate = other.feeRate;
         this.fee = other.fee;
     }
 
@@ -161,6 +163,11 @@ public class Transaction implements Serializable, Comparable<Transaction> {
         return this;
     }
 
+    public Transaction amount (BigDecimal amount) {
+        this.amount = amount;
+        return this;
+    }
+
     public BigDecimal getAmount() {
         return amount;
     }
@@ -195,6 +202,10 @@ public class Transaction implements Serializable, Comparable<Transaction> {
         return feeAmount;
     }
 
+    // FeeRate
+    public BigDecimal getFeeRate() {
+        return feeRate;
+    }
 
     // Calculated fields
     public BigDecimal getMajorRate() {
@@ -249,6 +260,7 @@ public class Transaction implements Serializable, Comparable<Transaction> {
             feeRate = getExchangeRate(feeCurrency, NATIVE);
         }
         fee = feeRate.multiply(feeAmount);
+        this.feeRate = feeRate;
 
         return this;
     }
@@ -277,9 +289,10 @@ public class Transaction implements Serializable, Comparable<Transaction> {
                 "Major Rate (" + NATIVE + ")",
                 "Minor Rate (" + NATIVE + ")",
                 "Value (" + NATIVE + ")",
-                "Fee Amount",
                 "Fee Currency",
-                "Fee (" + NATIVE + ")"
+                "Fee Amount",
+                "Fee Rate (" + NATIVE + ")",
+                "Fee (" + NATIVE + ")",
         };
     }
 
@@ -295,8 +308,9 @@ public class Transaction implements Serializable, Comparable<Transaction> {
                 String.format("%.2f", majorRate),
                 String.format("%.2f", minorRate),
                 String.format("%.2f", value),
-                feeAmount.toString(),
                 feeCurrency.toString(),
+                feeAmount.toString(),
+                String.format("%.2f", feeRate),
                 String.format("%.2f", fee)
         };
     }
@@ -312,9 +326,11 @@ public class Transaction implements Serializable, Comparable<Transaction> {
                 "\nMajorRate:    " + String.format("%.6f", majorRate) +
                 "\nMinorRate:    " + String.format("%.6f", minorRate) +
                 "\nValue:        " + String.format("%.2f", value) + " " + NATIVE +
-                "\nFeeAmount:    " + String.format("%.6f", feeAmount) +
                 "\nFeeCurrency:  " + feeCurrency +
+                "\nFeeAmount:    " + String.format("%.6f", feeAmount) +
+                "\nFee Rate:     " + String.format("%.2f",feeRate) + " " + NATIVE +
                 "\nFee:          " + String.format("%.2f",fee) + " " + NATIVE;
+
     }
 
 

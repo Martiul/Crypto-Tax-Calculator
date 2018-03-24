@@ -1,0 +1,8 @@
+Exchange,Date,Trade Type,Major,Minor,Amount,Local Rate,Major Rate (CAD),Minor Rate (CAD),Value (CAD),Fee Currency,Fee Amount,Fee Rate (CAD),Fee (CAD),Gain/Loss (CAD)
+Quadriga,Fri Sep 01 12:00:00 EDT 2017,BUY,ETH,CAD,1.006,500,500.00,1.00,503.00,ETH,0.005,500.00,2.50,0.00
+Binance,Sun Oct 01 12:00:00 EDT 2017,SELL,ETH,LTC,1,5.52,377.57,68.50,377.57,ETH,0.001,377.57,0.38,-122.55
+Bitfinex,Wed Nov 01 12:00:00 EDT 2017,BUY,LTC,USD,10.2,54.62,73.17,1.25,746.33,LTC,0.05,73.17,3.66,0.23
+Quadriga,Tue Dec 26 05:46:00 EST 2017,SELL,LTC,CAD,10.05,365,365.00,1.00,3668.25,CAD,18.25,1.00,18.25,2958.44
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,24.78607,2836.11747
+,,,,,,,,,,,,,Capital Gains: ,2811.33140

@@ -29,7 +29,7 @@ public class Main {
 
     public static void main(String [] argss) throws NullPointerException {
 
-        String [] args = inputByFile("test3.txt");
+        String [] args = inputByFile("sample.txt");
         String arg;
         int argNum = 0;
         int numFiles = 0;
@@ -96,7 +96,7 @@ public class Main {
             for (Map.Entry<String, Exchange> file : matchedExchanges.entrySet()) {
                 System.out.println(file.getKey() + " - " + file.getValue());
             }
-
+            System.out.println("Output file: " + outputFileName);
             System.out.print("Is this the correct information (Y/N)? ");
             Scanner sc = new Scanner(System.in);
             char input = sc.next().charAt(0);

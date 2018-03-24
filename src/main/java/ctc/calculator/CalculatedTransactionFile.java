@@ -73,6 +73,12 @@ public class CalculatedTransactionFile extends TransactionFile {
                     ));
                 }
             }
+
+            // Paying fees is also taxable
+            if (!t.getFeeCurrency().isFiat()) {
+                BigDecimal feeGainLoss = sell(t.getFeeCurrency(), t.getFeeAmount(), t.getFeeRate());
+                ct.setGainLoss(ct.getGainLoss().add(feeGainLoss));
+            }
             addTransaction(ct);
         }
     }
@@ -101,12 +107,15 @@ public class CalculatedTransactionFile extends TransactionFile {
 
                 // Take amount from assets. Calculate profit
                 // If more amount, take next element. repeat
-                if (amountBought.compareTo(amountSold) > 0) {
+                if (amountBought.compareTo(amountSold) >= 0) {
                     // This can cover all sold
                     earliest.setAmount(amountBought.subtract(amountSold));
                     gainLoss = gainLoss.add((rateSold.subtract(rateBought)).multiply(amountSold));
-                    amountSold = BigDecimal.ZERO;
 
+                    if (amountBought.compareTo(amountSold) == 0) {
+                        assets.get(currencySold).remove();
+                    }
+                    amountSold = BigDecimal.ZERO;
                 } else {
                     // Need this and another
                     gainLoss = gainLoss.add((rateSold.subtract(rateBought)).multiply(amountBought));
@@ -115,7 +124,8 @@ public class CalculatedTransactionFile extends TransactionFile {
                 }
 
             } catch (NoSuchElementException e) {
-                System.err.println("No history of " + currencySold + " being bought before being sold. (Is this a fork or token?)");
+                System.err.println("No history of " + currencySold + " being bought before being sold (" +
+                        rateSold.toString() + "). Is this a fork or token?)");
                 return rateSold.multiply(amountSold);
             }
         }
