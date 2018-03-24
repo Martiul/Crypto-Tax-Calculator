@@ -84,12 +84,14 @@ Here is a list of difficulties faced when trying to manually calculate profit/lo
 
 
 Binance:
+
 | Date            | Market | Type | Price | Amount | Total | Fee   | Fee Coin | 
 |-----------------|--------|------|-------|--------|-------|-------|----------| 
 | 10/1/2017 12:00 | ETHLTC | SELL | 5.52  | 1      | 5.52  | 0.001 | ETH      | 
 
 
 Bitfinex:
+
 | #   | Pair    | Amount | Price | Fee  | FeeCurrency | Date            | 
 |-----|---------|--------|-------|------|-------------|-----------------| 
 | XXX | LTC/USD | 10.2   | 54.62 | 0.05 | LTC         | 11/1/2017 12:00 | 
@@ -97,6 +99,7 @@ Bitfinex:
 
 
 Feeding the files into this program, he can get the follow `csv` as output
+
 | Exchange | Date                         | Trade Type | Major | Minor | Amount | Local Rate | Major Rate (CAD) | Minor Rate (CAD) | Value (CAD) | Fee Currency | Fee Amount | Fee Rate (CAD) | Fee (CAD)       | Gain/Loss (CAD) | 
 |----------|------------------------------|------------|-------|-------|--------|------------|------------------|------------------|-------------|--------------|------------|----------------|-----------------|-----------------| 
 | Quadriga | Fri Sep 01 12:00:00 EDT 2017 | BUY        | ETH   | CAD   | 1.006  | 500        | 500.00           | 1.00             | 503.00      | ETH          | 0.005      | 500.00         | 2.50            | 0.00            | 
