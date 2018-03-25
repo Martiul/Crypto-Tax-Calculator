@@ -1,14 +1,13 @@
+package ctc.transaction.files;
+
 import com.opencsv.CSVReader;
-import ctc.enums.TradeType;
+import ctc.transactions.Transaction;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Currency;
+import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Map;
 
 public class QuadrigaTransactionFile extends TransactionFile {
 
@@ -21,7 +20,10 @@ public class QuadrigaTransactionFile extends TransactionFile {
             while ((csvLine = csv.readNext()) != null) {
                 HashMap <String, String> hm = createHashMap(header,csvLine);
 
-                // Fee currency is that of the currency received
+                // Special properties:
+                // The currency of amount is Major
+                // The currency of fee is major for buys, minor for sells (incoming currency)
+
                 String feeCurrency;
                 if (hm.get("type").equals("buy")) {
                     feeCurrency = hm.get("major");

@@ -1,5 +1,7 @@
+package ctc.transactions;
 
 import ctc.enums.Currency;
+import ctc.enums.Exchange;
 import ctc.enums.TradeType;
 import org.json.JSONObject;
 
@@ -23,18 +25,19 @@ import java.util.Date;
  * Implemented using Builder design pattern and BigDecimal for accuracy
  */
 public class Transaction implements Serializable, Comparable<Transaction> {
-    private String exchange;
+    private Exchange exchange;
     private Date date;
     private TradeType type;
     private Currency major;
     private Currency minor;
-    private BigDecimal amount;
+    private BigDecimal amount;          // Amount of major
     private BigDecimal localRate;       // Major-Minor rate
     private BigDecimal majorRate;       // Major-NATIVE rate
     private BigDecimal minorRate;       // Minor-NATIVE rate
     private BigDecimal value;
-    private BigDecimal feeAmount;
     private Currency feeCurrency;
+    private BigDecimal feeAmount;
+    private BigDecimal feeRate;
     private BigDecimal fee;
     private final Currency NATIVE = Currency.CAD;
     private DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm");
@@ -52,17 +55,18 @@ public class Transaction implements Serializable, Comparable<Transaction> {
         this.majorRate = other.majorRate;
         this.minorRate = other.minorRate;
         this.value = other.value;
-        this.feeAmount = other.feeAmount;
         this.feeCurrency = other.feeCurrency;
+        this.feeAmount = other.feeAmount;
+        this.feeRate = other.feeRate;
         this.fee = other.fee;
     }
 
     // Exchange
     public Transaction (String exchange) {
-        this.exchange = exchange;
+        this.exchange = Exchange.valueOf(exchange.toUpperCase());
     }
 
-    public String getExchange() {
+    public Exchange getExchange() {
         return exchange;
     }
 
@@ -160,6 +164,11 @@ public class Transaction implements Serializable, Comparable<Transaction> {
         return this;
     }
 
+    public Transaction amount (BigDecimal amount) {
+        this.amount = amount;
+        return this;
+    }
+
     public BigDecimal getAmount() {
         return amount;
     }
@@ -194,6 +203,10 @@ public class Transaction implements Serializable, Comparable<Transaction> {
         return feeAmount;
     }
 
+    // FeeRate
+    public BigDecimal getFeeRate() {
+        return feeRate;
+    }
 
     // Calculated fields
     public BigDecimal getMajorRate() {
@@ -248,6 +261,7 @@ public class Transaction implements Serializable, Comparable<Transaction> {
             feeRate = getExchangeRate(feeCurrency, NATIVE);
         }
         fee = feeRate.multiply(feeAmount);
+        this.feeRate = feeRate;
 
         return this;
     }
@@ -276,15 +290,16 @@ public class Transaction implements Serializable, Comparable<Transaction> {
                 "Major Rate (" + NATIVE + ")",
                 "Minor Rate (" + NATIVE + ")",
                 "Value (" + NATIVE + ")",
-                "Fee Amount",
                 "Fee Currency",
-                "Fee (" + NATIVE + ")"
+                "Fee Amount",
+                "Fee Rate (" + NATIVE + ")",
+                "Fee (" + NATIVE + ")",
         };
     }
 
     public String [] toCsv() {
         return new String[]{
-                exchange,
+                exchange.toString(),
                 date.toString(),
                 type.toString(),
                 major.toString(),
@@ -294,8 +309,9 @@ public class Transaction implements Serializable, Comparable<Transaction> {
                 String.format("%.2f", majorRate),
                 String.format("%.2f", minorRate),
                 String.format("%.2f", value),
-                feeAmount.toString(),
                 feeCurrency.toString(),
+                feeAmount.toString(),
+                String.format("%.2f", feeRate),
                 String.format("%.2f", fee)
         };
     }
@@ -311,9 +327,11 @@ public class Transaction implements Serializable, Comparable<Transaction> {
                 "\nMajorRate:    " + String.format("%.6f", majorRate) +
                 "\nMinorRate:    " + String.format("%.6f", minorRate) +
                 "\nValue:        " + String.format("%.2f", value) + " " + NATIVE +
-                "\nFeeAmount:    " + String.format("%.6f", feeAmount) +
                 "\nFeeCurrency:  " + feeCurrency +
+                "\nFeeAmount:    " + String.format("%.6f", feeAmount) +
+                "\nFee Rate:     " + String.format("%.2f",feeRate) + " " + NATIVE +
                 "\nFee:          " + String.format("%.2f",fee) + " " + NATIVE;
+
     }
 
 
@@ -363,7 +381,7 @@ public class Transaction implements Serializable, Comparable<Transaction> {
 
 
         int responseCode = con.getResponseCode();
-        System.out.println("Response code: " + responseCode);
+//        System.out.println("Response code: " + responseCode);
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
 
@@ -374,7 +392,7 @@ public class Transaction implements Serializable, Comparable<Transaction> {
                 JSONObject parser = new JSONObject(line);
                 // System.out.println(parser.toString());        // Output json
                 price = parser.getJSONArray("Data").getJSONObject(0).get("close").toString();
-                System.out.println(date + ": " + major + "/" + minor + " - " + price);
+//                System.out.println(date + ": " + major + "/" + minor + " - " + price);
             }
             in.close();
         } else {

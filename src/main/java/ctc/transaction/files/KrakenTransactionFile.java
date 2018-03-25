@@ -1,5 +1,8 @@
+package ctc.transaction.files;
+
 import com.opencsv.CSVReader;
 import ctc.enums.Currency;
+import ctc.transactions.Transaction;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -23,7 +26,7 @@ public class KrakenTransactionFile extends TransactionFile {
                 HashMap <String, String> hm = createHashMap(header, csvLine);
 
                 // Almost all currency pairs are in the form XABCXDEF,
-                // with the one exception of BCH
+                // with the one exception of those with BCH
                 String tradePair = hm.get("pair");
                 String major;
                 String minor;

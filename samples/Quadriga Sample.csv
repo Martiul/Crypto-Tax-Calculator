@@ -1,3 +1,3 @@
 type,major,minor,amount,rate,value,fee,total,timestamp,datetime
-buy,eth,cad,1.005,500,502.5,0.005,1,1504267200,9/1/2017 12:00
+buy,eth,cad,1.006,500,503.0,0.005,1,1504267200,9/1/2017 12:00
 sell,ltc,cad,10.05,365,3668.25,18.25,3650,1514267200,12/26/2017 5:46
