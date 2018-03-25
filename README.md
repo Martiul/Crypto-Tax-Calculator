@@ -42,8 +42,8 @@ Assuming there are no transaction fees, buying a stock of ABC at $90 and selling
 Even with more complicated transactions, being able track assets with whole numbered quantities makes
 calculations tangible and easier to make sense of.
 
-However, this convenience does not exist with cryptocurrency. Cryptocurrency is more similar to forex trading, which is
-trickier to calculate profits and losses from. But unlike brokerages, cryptocurrency exchanges do not do any of the
+However, this convenience does not exist with cryptocurrency. Cryptocurrency similar to forex trading, where it is
+tricky to calculate profits and losses. But unlike brokerages, cryptocurrency exchanges do not do any of the
 calculating for you, and they never will because they can't. 
 
 Here is a list of difficulties faced when trying to manually calculate profit/loss
@@ -54,7 +54,7 @@ Here is a list of difficulties faced when trying to manually calculate profit/lo
 
 *   Intercurrency transactions
     * example: Buy 10 LTC at a BTC/LTC rate of 14. In most cases, this transaction is taxable
-    * image if stocks could be swapped in a stock market
+    * imagine if stocks could be swapped in a stock market
 
 *   No Indication of Value in Fiat
     * example: Calculate the gains made from the transaction in the previous point given the time it was executed
