@@ -66,7 +66,7 @@ Here is a list of difficulties faced when trying to manually calculate profit/lo
 *   Determining Exchange Rates
     * the profit/loss in CAD for the second example of the previous point can only be calculate if the BTC/CAD rate is known
     and either the LTC/CAD or EUR/CAD rate are known
-    * Exchange rates for cryptocurrency flucuates every hour and must be found for every transaction
+    * Exchange rates for cryptocurrency flucuate every hour and must be accounted for in every transaction
     
 ### How the Program Overcomes These Difficulties
 
@@ -79,10 +79,11 @@ Here is a list of difficulties faced when trying to manually calculate profit/lo
     * Profit/loss of a transaction between cryptocurrency is calculated by selling the currency used at the current rate in a native currency
 
 *   No Indication of Value in Fiat
-    * API requests made to obtain the value in fiat
+    * API requests are made to [CryptoCompare](https://min-api.cryptocompare.com/) to obtain the value in fiat
 
 *   Determining Exchange Rates
-    * API requests made to obtain exchange rates
+    * API requests are made to [CryptoCompare](https://min-api.cryptocompare.com/) to obtain the exchange rate
+
  
  ## Sample Scenario
  Joe is looking to buy some cryptocurrency. In September he opens an account on Quadriga and decides to buy about 1 ETH 
@@ -179,7 +180,7 @@ matching `csv` headers to their corresponding field in the `Transaction` model.
  ```
  
  ## Other Considerations
- * Used Java's BigDecimal class to maintain accuracy when dealing with decimals
+ * Used Java's `BigDecimal` class to maintain accuracy when dealing with decimals
  
  * Some cryptocurrencies have multiple symbols. For example, BTC and XBT are both
  symbols for Bitcoin. However, the API used in this calculator only accepts BTC, 
