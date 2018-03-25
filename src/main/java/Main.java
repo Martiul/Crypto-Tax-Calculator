@@ -96,6 +96,7 @@ public class Main {
             System.out.println("Output file: " + outputFileName);
             System.out.print("Is this the correct information (Y/N)? ");
             Scanner sc = new Scanner(System.in);
+
             char input = sc.next().charAt(0);
             if (input == 'y' || input == 'Y') {
                 try {
@@ -105,7 +106,7 @@ public class Main {
                             transactions.add(t);
                         }
                     }
-                    System.out.println("Number of files processed: " + numFiles);
+                    System.out.println("\nNumber of files processed: " + numFiles);
                     System.out.println("Number of transactions: " + transactions.size() + "\n");
 
                     CryptoTaxCalculator ctc = new CryptoTaxCalculator(transactions);

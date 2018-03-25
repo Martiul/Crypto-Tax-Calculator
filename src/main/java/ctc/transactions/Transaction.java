@@ -1,6 +1,7 @@
 package ctc.transactions;
 
 import ctc.enums.Currency;
+import ctc.enums.Exchange;
 import ctc.enums.TradeType;
 import org.json.JSONObject;
 
@@ -24,7 +25,7 @@ import java.util.Date;
  * Implemented using Builder design pattern and BigDecimal for accuracy
  */
 public class Transaction implements Serializable, Comparable<Transaction> {
-    private String exchange;
+    private Exchange exchange;
     private Date date;
     private TradeType type;
     private Currency major;
@@ -62,10 +63,10 @@ public class Transaction implements Serializable, Comparable<Transaction> {
 
     // Exchange
     public Transaction (String exchange) {
-        this.exchange = exchange;
+        this.exchange = Exchange.valueOf(exchange.toUpperCase());
     }
 
-    public String getExchange() {
+    public Exchange getExchange() {
         return exchange;
     }
 
@@ -298,7 +299,7 @@ public class Transaction implements Serializable, Comparable<Transaction> {
 
     public String [] toCsv() {
         return new String[]{
-                exchange,
+                exchange.toString(),
                 date.toString(),
                 type.toString(),
                 major.toString(),

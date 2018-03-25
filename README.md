@@ -8,12 +8,12 @@ transaction history provided by supported exchanges.
 Simply provide the files to the program as command line arguments and the program will automatically detect which exchange the
 file came from. After confirmation from the user, the calculator will begin processing all transactions, determining profits and losses using the FIFO method.
 
-Sample Input:
+__Sample Input:__
 ```
 "./samples/Binance Sample.csv" "./samples/Quadriga Sample.csv" "./samples/Bitfinex Sample.csv" -output "./samples/output.csv"
 ```
 
-User confirmation:
+__User confirmation:__
 ```
 ./samples/Binance Sample.csv - BINANCE
 ./samples/Quadriga Sample.csv - QUADRIGA
@@ -22,7 +22,7 @@ Output file: ./samples/output.csv
 Is this the correct information (Y/N)? 
 ```
 
-Console output:
+__Console output:__
 ```
 Number of files processed: 3
 Number of transactions: 4
@@ -34,6 +34,7 @@ Amount:       5.62
 Rate:         73.17
 ```
 
+Too see the input and output files, jump to [Sample Scenario](#sample-scenario)
 
 ## The Difficulties with Calculating Profit/Loss
 With stocks and options, it is generally easy to calculate profit and loss. 
@@ -141,9 +142,10 @@ in November, following the FIFO method.
 
  ## Design
  
- ``
-uml here
- ``
+UML(ish) Diagram
+ 
+ ![UML](https://github.com/Martiul/Crypto-Tax-Calculator/raw/master/UML/CTC_UML.png "UML Diagram")
+
  
  In short,
  * All `TransactionFile`s have `Transaction`s and can be written to a `.csv` file
@@ -177,6 +179,8 @@ matching `csv` headers to their corresponding field in the `Transaction` model.
  ```
  
  ## Other Considerations
+ * Used Java's BigDecimal class to maintain accuracy when dealing with decimals
+ 
  * Some cryptocurrencies have multiple symbols. For example, BTC and XBT are both
  symbols for Bitcoin. However, the API used in this calculator only accepts BTC, 
  so the `Currency` enumeration has a `synonymFilter` function which returns the most common symbol of a currency

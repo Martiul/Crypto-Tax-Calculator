@@ -39,7 +39,7 @@ public abstract class TransactionFile {
      * numberOfCells  - Returns the number of cells used by the file
      * @return int
      */
-    public int numberOfCells() {
+    protected int numberOfCells() {
         // TODO throw
         assert (transactions.size() > 0);
         return transactions.get(0).getHeader().length;
