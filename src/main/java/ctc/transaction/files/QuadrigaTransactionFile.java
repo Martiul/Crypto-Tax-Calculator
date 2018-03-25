@@ -51,7 +51,7 @@ public class QuadrigaTransactionFile extends TransactionFile {
     }
 
     public static void main(String [] args) throws FileNotFoundException {
-        QuadrigaTransactionFile tf = new QuadrigaTransactionFile(new CSVReader(new FileReader("Quadriga December.csv")));
+        QuadrigaTransactionFile tf = new QuadrigaTransactionFile(new CSVReader(new FileReader("Quadriga.csv")));
         tf.seeTransactions();
     }
 }

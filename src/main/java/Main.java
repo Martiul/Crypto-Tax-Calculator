@@ -23,9 +23,9 @@ public class Main {
     public static final String USAGE_ERROR = "\nUsage: Main.java " +
             "[FILE1.csv [FILE2.csv ...]] [-output OUTPUTFILE.csv] ";
 
-    public static void main(String [] argss) throws IOException {
+    public static void main(String [] args) throws IOException {
 
-        String [] args = inputByFile("sample.txt");
+//        String [] args = inputByFile("sample.txt");
 
         String arg;
         int argNum = 0;
@@ -94,7 +94,7 @@ public class Main {
                 System.out.println(file.getKey() + " - " + file.getValue());
             }
             System.out.println("Output file: " + outputFileName);
-            System.out.print("Is this the correct information (Y/N)? ");
+            System.out.print("Is this information correct (Y/N)? ");
             Scanner sc = new Scanner(System.in);
 
             char input = sc.next().charAt(0);

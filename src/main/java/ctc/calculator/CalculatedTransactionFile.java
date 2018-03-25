@@ -166,10 +166,10 @@ public class CalculatedTransactionFile extends TransactionFile {
             }
         }
 
-        additional[1][cells-2] = totalFees.toString();
-        additional[1][cells-1] = totalGainLoss.toString();
+        additional[1][cells-2] = String.format("%.2f", totalFees);
+        additional[1][cells-1] = String.format("%.2f", totalGainLoss);
         additional[2][cells-2] = "Capital Gains: ";
-        additional[2][cells-1] = totalGainLoss.subtract(totalFees).toString();
+        additional[2][cells-1] = String.format("%.2f", totalGainLoss.subtract(totalFees));
 
         super.writeToCsv(fileName, additional);
     }
