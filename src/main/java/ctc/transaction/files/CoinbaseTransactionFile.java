@@ -64,7 +64,7 @@ public class CoinbaseTransactionFile extends TransactionFile {
     }
 
     public static void main(String [] args) throws FileNotFoundException {
-        CoinbaseTransactionFile tf = new CoinbaseTransactionFile(new CSVReader(new FileReader("Coinbase ETH.csv")));
+        CoinbaseTransactionFile tf = new CoinbaseTransactionFile(new CSVReader(new FileReader("Coinbase.csv")));
         tf.seeTransactions();
     }
 

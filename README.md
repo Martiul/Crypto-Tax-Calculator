@@ -1,6 +1,6 @@
 # Crypto Tax Calculator
 
-DISCLAIMER: I am not an accountant. Use at your own risk and if in doubt, always consult a professional.
+__DISCLAIMER:__ I am not an accountant. Use at your own risk and if in doubt, always consult a professional.
 
 This is an easy-to-use Java program that calculates the capital gains made from trading cryptocurrency using the
 transaction history provided by supported exchanges. 
@@ -10,16 +10,16 @@ file came from. After confirmation from the user, the calculator will begin proc
 
 __Sample Input:__
 ```
-"./samples/Binance Sample.csv" "./samples/Quadriga Sample.csv" "./samples/Bitfinex Sample.csv" -output "./samples/output.csv"
+"./samples/Binance.csv" "./samples/Quadriga.csv" "./samples/Bitfinex.csv" -output "./samples/output.csv"
 ```
 
 __User confirmation:__
 ```
-./samples/Binance Sample.csv - BINANCE
-./samples/Quadriga Sample.csv - QUADRIGA
-./samples/Bitfinex Sample.csv - BITFINEX
+./samples/Binance.csv - BINANCE
+./samples/Quadriga.csv - QUADRIGA
+./samples/Bitfinex.csv - BITFINEX
 Output file: ./samples/output.csv
-Is this the correct information (Y/N)? 
+Is this information correct (Y/N)? 
 ```
 
 __Console output:__
@@ -38,7 +38,7 @@ Too see the input and output files, jump to [Sample Scenario](#sample-scenario)
 
 ## The Difficulties with Calculating Profit/Loss
 With stocks and options, it is generally easy to calculate profit and loss. 
-Assuming there are no transaction fees, Buying a stock of ABC at $90 and selling it at $100 means $10 profit.
+Assuming there are no transaction fees, buying a stock of ABC at $90 and selling it at $100 means $10 profit.
 Even with more complicated transactions, being able track assets with whole numbered quantities makes
 calculations tangible and easier to make sense of.
 
@@ -53,7 +53,7 @@ Here is a list of difficulties faced when trying to manually calculate profit/lo
     * example: You bought 0.4245 ETH at rate A and 0.312 ETH at rate B. Later you sell 0.6777 ETH at rate C
 
 *   Intercurrency transactions
-    * example: Buy 10 LTC at a BTC/LTC rate of 14. This transaction is taxable for most cases
+    * example: Buy 10 LTC at a BTC/LTC rate of 14. In most cases, this transaction is taxable
     * image if stocks could be swapped in a stock market
 
 *   No Indication of Value in Fiat
@@ -99,7 +99,7 @@ Here is a list of difficulties faced when trying to manually calculate profit/lo
  
  Joe downloads the `csv` files provided by the exchanges, which are as follows:
  
- Quadriga:
+ _Quadriga:_
 
 | type | major | minor | amount | rate | value   | fee   | total | timestamp  | datetime        | 
 |------|-------|-------|--------|------|---------|-------|-------|------------|-----------------| 
@@ -107,14 +107,14 @@ Here is a list of difficulties faced when trying to manually calculate profit/lo
 | sell | ltc   | cad   | 10.05  | 365  | 3668.25 | 18.25 | 3650  | 1514267200 | 12/26/2017 5:46 | 
 
 
-Binance:
+_Binance:_
 
 | Date            | Market | Type | Price | Amount | Total | Fee   | Fee Coin | 
 |-----------------|--------|------|-------|--------|-------|-------|----------| 
 | 10/1/2017 12:00 | ETHLTC | SELL | 5.52  | 1      | 5.52  | 0.001 | ETH      | 
 
 
-Bitfinex:
+_Bitfinex:_
 
 | #   | Pair    | Amount | Price | Fee  | FeeCurrency | Date            | 
 |-----|---------|--------|-------|------|-------------|-----------------| 
@@ -122,7 +122,7 @@ Bitfinex:
 
 
 
-Feeding the files into this program, he can get the following standardized `csv` as output
+Feeding the files into this program, he gets the following standardized `csv` as output
 
 | Exchange | Date                         | Trade Type | Major | Minor | Amount | Local Rate | Major Rate (CAD) | Minor Rate (CAD) | Value (CAD) | Fee Currency | Fee Amount | Fee Rate (CAD) | Fee (CAD)       | Gain/Loss (CAD) | 
 |----------|------------------------------|------------|-------|-------|--------|------------|------------------|------------------|-------------|--------------|------------|----------------|-----------------|-----------------| 
@@ -131,14 +131,14 @@ Feeding the files into this program, he can get the following standardized `csv`
 | Bitfinex | Wed Nov 01 12:00:00 EDT 2017 | BUY        | LTC   | USD   | 10.2   | 54.62      | 73.17            | 1.25             | 746.33      | LTC          | 0.05       | 73.17          | 3.66            | 0.23            | 
 | Quadriga | Tue Dec 26 05:46:00 EST 2017 | SELL       | LTC   | CAD   | 10.05  | 365        | 365.00           | 1.00             | 3668.25     | CAD          | 18.25      | 1.00           | 18.25           | 2958.44         | 
 |          |                              |            |       |       |        |            |                  |                  |             |              |            |                |                 |                 | 
-|          |                              |            |       |       |        |            |                  |                  |             |              |            |                | 24.78607        | 2836.11747      | 
-|          |                              |            |       |       |        |            |                  |                  |             |              |            |                | Capital Gains:  | 2811.33140      | 
+|          |                              |            |       |       |        |            |                  |                  |             |              |            |                | 24.78607        | 2836.12         | 
+|          |                              |            |       |       |        |            |                  |                  |             |              |            |                | Capital Gains:  | 2811.33         | 
 
 From the output file, he made a few observations: the transaction he made to exchange
 all his ETH for LTC was taxable, calculated as if he had first sold all his ETH before buying
-LTC. Secondly, a trading fee he had to once pair in LTC was also taxable. Finally, he found
+LTC. Secondly, a trading fee once payed in LTC was also taxable. Finally, he found
 that the program sold the LTC he bought in October before selling the LTC he bought
-in November, following the FIFO method.
+in November, following the FIFO method as expected.
 
  ## Design
  
