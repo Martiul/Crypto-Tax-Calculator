@@ -6,11 +6,34 @@ This is an easy-to-use Java program that calculates the capital gains made from 
 transaction history provided by supported exchanges. 
 
 Simply provide the files to the program as command line arguments and the program will automatically detect which exchange the
-file came from and then begin processing all transactions, calculating profits and losses using the FIFO method.
+file came from. After confirmation from the user, the calculator will begin processing all transactions, determining profits and losses using the FIFO method.
 
+Sample Input:
 ```
-Sample usage
+"./samples/Binance Sample.csv" "./samples/Quadriga Sample.csv" "./samples/Bitfinex Sample.csv" -output "./samples/output.csv"
 ```
+
+User confirmation:
+```
+./samples/Binance Sample.csv - BINANCE
+./samples/Quadriga Sample.csv - QUADRIGA
+./samples/Bitfinex Sample.csv - BITFINEX
+Output file: ./samples/output.csv
+Is this the correct information (Y/N)? 
+```
+
+Console output:
+```
+Number of files processed: 3
+Number of transactions: 4
+
+=== REMAINING ASSETS ===
+Date Bought:  Wed Nov 01 12:00:00 EDT 2017
+Currency:     LTC
+Amount:       5.62
+Rate:         73.17
+```
+
 
 ## The Difficulties with Calculating Profit/Loss
 With stocks and options, it is generally easy to calculate profit and loss. 
@@ -61,11 +84,11 @@ Here is a list of difficulties faced when trying to manually calculate profit/lo
     * API requests made to obtain exchange rates
  
  ## Sample Scenario
- Joe is looking to buy some cryptocurrency. In September he opens an account on Quadriga and decides to buy about 1 ETH, 
+ Joe is looking to buy some cryptocurrency. In September he opens an account on Quadriga and decides to buy about 1 ETH 
  with Canadian dollars, paying a bit more to cover for trading fees.
  
  Later in October, Joe has transferred all his ETH to Binance and gets interested in another cryptocurrency called 
- Litecoin (LTC), which has been rising while ETH has been falling. In the spur of the moment he exchanges
+ Litecoin (LTC) which has been rising lately. In the spur of the moment he exchanges
  all his ETH for LTC.
  
  Again, Joe moves his LTC to another exchange called Bitfinex. Happy with his earlier purchase, he decides
@@ -79,7 +102,7 @@ Here is a list of difficulties faced when trying to manually calculate profit/lo
 
 | type | major | minor | amount | rate | value   | fee   | total | timestamp  | datetime        | 
 |------|-------|-------|--------|------|---------|-------|-------|------------|-----------------| 
-| buy  | eth   | cad   | 1.006  | 500  | 502.5   | 0.005 | 1     | 1504267200 | 9/1/2017 12:00  | 
+| buy  | eth   | cad   | 1.006  | 500  | 503.0   | 0.005 | 1     | 1504267200 | 9/1/2017 12:00  | 
 | sell | ltc   | cad   | 10.05  | 365  | 3668.25 | 18.25 | 3650  | 1514267200 | 12/26/2017 5:46 | 
 
 
@@ -98,7 +121,7 @@ Bitfinex:
 
 
 
-Feeding the files into this program, he can get the follow `csv` as output
+Feeding the files into this program, he can get the following standardized `csv` as output
 
 | Exchange | Date                         | Trade Type | Major | Minor | Amount | Local Rate | Major Rate (CAD) | Minor Rate (CAD) | Value (CAD) | Fee Currency | Fee Amount | Fee Rate (CAD) | Fee (CAD)       | Gain/Loss (CAD) | 
 |----------|------------------------------|------------|-------|-------|--------|------------|------------------|------------------|-------------|--------------|------------|----------------|-----------------|-----------------| 
@@ -116,4 +139,49 @@ LTC. Secondly, a trading fee he had to once pair in LTC was also taxable. Finall
 that the program sold the LTC he bought in October before selling the LTC he bought
 in November, following the FIFO method.
 
- ## How It's Built and Extendability
+ ## Design
+ 
+ ``
+uml here
+ ``
+ 
+ In short,
+ * All `TransactionFile`s have `Transaction`s and can be written to a `.csv` file
+ * Exchange-specific `TransactionFile`s match external information to the standardized `Transaction` model
+ * `CryptoTaxCalculator` takes in `Transaction`s and puts them into a `CalculatedTransactionFile`
+
+Additionally, the `Transaction` class follows the Builder design pattern, avoiding the
+need for many getter/setters or a constructor consuming a dozen arguments.
+  
+## Extensibility
+
+Support for additional currencies can be done by adding them to the `Currency` enumeration.
+
+Making a new `TransactionFile` to support another exchange is as simple as copying boilerplate code and then
+matching `csv` headers to their corresponding field in the `Transaction` model.
+
+ Sample code from `BinanceTransactionFile`
+ 
+ ```
+ HashMap <String, String> hm = createHashMap(header, csvLine);
+ Transaction t = new Transaction("Binance")
+         .date(hm.get("Date"))
+         .type(hm.get("Type"))
+         .major(hm.get("Market").substring(0,3))
+         .minor(hm.get("Market").substring(3,6))
+         .localRate(hm.get("Price"))
+         .amount(hm.get("Amount"))
+         .feeCurrency(hm.get("Fee Coin"))
+         .feeAmount(hm.get("Fee"))
+         .build();
+ ```
+ 
+ ## Other Considerations
+ * Some cryptocurrencies have multiple symbols. For example, BTC and XBT are both
+ symbols for Bitcoin. However, the API used in this calculator only accepts BTC, 
+ so the `Currency` enumeration has a `synonymFilter` function which returns the most common symbol of a currency
+ 
+ * The program outputs a list of remaining assets and the rates at which
+ they were purchased. This is useful for carrying assets forward to the next tax year
+ 
+ 

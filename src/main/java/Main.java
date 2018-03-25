@@ -20,16 +20,13 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static final String USAGE_ERROR = "Usage: Main.java " +
-            "[-binance binance.csv] " +
-            "[-bitfinex bitfinex.csv] " +
-            "[-coinbase coinbase.csv] " +
-            "[-kraken kraken.csv] " +
-            "[-quadriga quadriga.csv]";
+    public static final String USAGE_ERROR = "\nUsage: Main.java " +
+            "[FILE1.csv [FILE2.csv ...]] [-output OUTPUTFILE.csv] ";
 
-    public static void main(String [] argss) throws NullPointerException {
+    public static void main(String [] argss) throws IOException {
 
         String [] args = inputByFile("sample.txt");
+
         String arg;
         int argNum = 0;
         int numFiles = 0;
@@ -41,7 +38,7 @@ public class Main {
         HashMap<String, Exchange> matchedExchanges = new HashMap<String, Exchange>();
 
         if (args.length == 0) {
-            throw new IllegalArgumentException(USAGE_ERROR);
+            throw new IOException(USAGE_ERROR);
         }
 
         // Go through arguments and detect the Exchange each csv came from
@@ -115,7 +112,7 @@ public class Main {
                     ctc.writeToCsv(outputFileName);
                     ctc.outputAssets();
                 } catch (IOException e) {
-
+                    System.err.println(e.getMessage());
                 }
             }
         } else if (numFiles == 0) {
@@ -172,9 +169,9 @@ public class Main {
             }
             br.close();
         } catch (FileNotFoundException e) {
-
+            System.err.println("Could not open file " + fileName);
         } catch (IOException e) {
-
+            System.err.println("Could not open FileReader");
         }
 
         return al.toArray(new String [0]);

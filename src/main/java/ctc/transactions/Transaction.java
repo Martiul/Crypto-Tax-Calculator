@@ -380,7 +380,7 @@ public class Transaction implements Serializable, Comparable<Transaction> {
 
 
         int responseCode = con.getResponseCode();
-        System.out.println("Response code: " + responseCode);
+//        System.out.println("Response code: " + responseCode);
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
 
@@ -391,7 +391,7 @@ public class Transaction implements Serializable, Comparable<Transaction> {
                 JSONObject parser = new JSONObject(line);
                 // System.out.println(parser.toString());        // Output json
                 price = parser.getJSONArray("Data").getJSONObject(0).get("close").toString();
-                System.out.println(date + ": " + major + "/" + minor + " - " + price);
+//                System.out.println(date + ": " + major + "/" + minor + " - " + price);
             }
             in.close();
         } else {
