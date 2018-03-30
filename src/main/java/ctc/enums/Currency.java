@@ -6,7 +6,7 @@ package ctc.enums;
  */
 
 public enum Currency {
-    CAD, USD, BNB, BTC, BTG, ETH, LTC, XRP, BCC, BCH, TRX, XVG, XBT, XLM;
+    CAD, USD, BNB, BTC, BTG, ETH, LTC, XRP, BCC, BCH, TRX, XVG, XBT, XLM, REQ;
 
     /**
      * isFiat   - Returns if a Currency is fiat or not

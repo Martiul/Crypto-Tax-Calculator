@@ -61,6 +61,23 @@ public class Transaction implements Serializable, Comparable<Transaction> {
         this.fee = other.fee;
     }
 
+    public Transaction(String [] fromFile) {
+        this.exchange = Exchange.valueOf(fromFile[0]);
+        this.date = new Date(fromFile[1]);
+        this.type = TradeType.valueOf(fromFile[2]);
+        this.major = Currency.valueOf(fromFile[3]);
+        this.minor = Currency.valueOf(fromFile[4]);
+        this.amount = new BigDecimal(fromFile[5]);
+        this.localRate = new BigDecimal(fromFile[6]);
+        this.majorRate = new BigDecimal(fromFile[7]);
+        this.minorRate = new BigDecimal(fromFile[8]);
+        this.value = new BigDecimal(fromFile[9]);
+        this.feeCurrency = Currency.valueOf(fromFile[10]);
+        this.feeAmount = new BigDecimal(fromFile[11]);
+        this.feeRate = new BigDecimal(fromFile[12]);
+        this.fee = new BigDecimal(fromFile[13]);
+    }
+
     // Exchange
     public Transaction (String exchange) {
         this.exchange = Exchange.valueOf(exchange.toUpperCase());

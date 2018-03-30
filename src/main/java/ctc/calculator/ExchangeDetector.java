@@ -33,6 +33,11 @@ public class ExchangeDetector {
         signatures.put(Exchange.QUADRIGA, new String [] {
                 "type","major","minor","amount","rate","value","fee","total","timestamp","datetime"
         });
+        signatures.put(Exchange.CTC, new String [] {
+                "Exchange","Date","Trade Type","Major","Minor","Amount","Local Rate","Major Rate (CAD)",
+                "Minor Rate (CAD)","Value (CAD)","Fee Currency","Fee Amount","Fee Rate (CAD)","Fee (CAD)","Gain/Loss (CAD)"
+        });
+
     }
 
     /**

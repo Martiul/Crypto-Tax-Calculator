@@ -23,9 +23,9 @@ public class Main {
     public static final String USAGE_ERROR = "\nUsage: Main.java " +
             "[FILE1.csv [FILE2.csv ...]] [-output OUTPUTFILE.csv] ";
 
-    public static void main(String [] args) throws IOException {
+    public static void main(String [] argss) throws IOException {
 
-//        String [] args = inputByFile("sample.txt");
+        String [] args = inputByFile("test2.txt");
 
         String arg;
         int argNum = 0;
@@ -148,6 +148,8 @@ public class Main {
                 return new KrakenTransactionFile(csvReader);
             } else if (exchange == Exchange.QUADRIGA) {
                 return new QuadrigaTransactionFile(csvReader);
+            } else if (exchange == Exchange.CTC) {
+                return new CTCTransactionFile(csvReader);
             }
         } catch (FileNotFoundException e) {
             System.err.println("Could not find file: " + filePath);
