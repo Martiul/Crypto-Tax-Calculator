@@ -124,8 +124,8 @@ public class CalculatedTransactionFile extends TransactionFile {
                 }
 
             } catch (NoSuchElementException e) {
-                System.err.println("No history of " + currencySold + " being bought before being sold (" +
-                        rateSold.toString() + "). Is this a fork or token?)");
+                System.err.println("No history of " + currencySold + " being bought before being sold ("
+                        + amountSold.toString() + " at " + rateSold.toString() + "). Is this a fork or token?)");
                 return rateSold.multiply(amountSold);
             }
         }

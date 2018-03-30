@@ -25,7 +25,7 @@ public class Main {
 
     public static void main(String [] args) throws IOException {
 
-//        String [] args = inputByFile("sample.txt");
+        //String [] args = inputByFile("sample.txt");
 
         String arg;
         int argNum = 0;
@@ -148,6 +148,8 @@ public class Main {
                 return new KrakenTransactionFile(csvReader);
             } else if (exchange == Exchange.QUADRIGA) {
                 return new QuadrigaTransactionFile(csvReader);
+            } else if (exchange == Exchange.CTC) {
+                return new CTCTransactionFile(csvReader);
             }
         } catch (FileNotFoundException e) {
             System.err.println("Could not find file: " + filePath);

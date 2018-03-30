@@ -6,5 +6,5 @@ package ctc.enums;
  */
 
 public enum Exchange {
-    BINANCE, BITFINEX, COINBASE, KRAKEN, QUADRIGA
+    BINANCE, BITFINEX, COINBASE, KRAKEN, QUADRIGA, CTC
 }
